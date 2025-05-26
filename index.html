@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Countdown Nintendo Switch 2</title>
+<style>
+  body { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    margin-top: 100px; 
+    transition: background-color 0.5s ease;
+  }
+  #countdown { font-size: 2em; margin-bottom: 20px; }
+  button { 
+    font-size: 1em; 
+    padding: 10px 20px; 
+    margin: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>Countdown bis Nintendo Switch 2 Release</h1>
+<div id="countdown"></div>
+<button id="toggleBtn">Anzeige wechseln</button>
+<button id="colorBtn">Hintergrundfarbe wechseln</button>
+
+<script>
+  const targetDate = new Date('2025-06-05T00:00:00');
+  const countdownElem = document.getElementById('countdown');
+  const toggleBtn = document.getElementById('toggleBtn');
+  const colorBtn = document.getElementById('colorBtn');
+
+  // Modus: 0 = Sekunden, 1 = Stunden, 2 = Tage, 3 = Zehntel, 4 = Hundertstel
+  let mode = 0;
+
+  // Farben für Hintergrundwechsel
+  const colors = ['#f0f8ff', '#ffe4e1', '#e6ffe6', '#ffffcc', '#dcd0ff'];
+  let colorIndex = 0;
+
+  function updateCountdown() {
+    const now = new Date();
+    let diff = targetDate - now;
+
+    if (diff <= 0) {
+      countdownElem.textContent = "Nintendo Switch 2 ist jetzt da!";
+      clearInterval(timer);
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const seconds = Math.floor(diff / 1000);
+
+    const ms = diff % 1000; // Millisekunden
+    const zehntel = Math.floor(ms / 100);
+    const hundertstel = Math.floor((ms % 100) / 10);
+
+    switch (mode) {
+      case 0:
+        countdownElem.textContent = `${seconds} Sekunden`;
+        break;
+      case 1:
+        countdownElem.textContent = `${hours} Stunden`;
+        break;
+      case 2:
+        countdownElem.textContent = `${days} Tage`;
+        break;
+      case 3: {
+        // Zehntel insgesamt bis Ziel (diff in ms / 100)
+        const totalZehntel = Math.ceil(diff / 100);
+        countdownElem.textContent = `Noch ${totalZehntel} Zehntel bis zum 5. Juni`;
+        break;
+      }
+      case 4: {
+        // Hundertstel insgesamt bis Ziel (diff in ms / 10)
+        const totalHundertstel = Math.ceil(diff / 10);
+        countdownElem.textContent = `Noch ${totalHundertstel} Hundertstel bis zum 5. Juni`;
+        break;
+      }
+    }
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    mode = (mode + 1) % 5;
+    updateCountdown();
+  });
+
+  colorBtn.addEventListener('click', () => {
+    colorIndex = (colorIndex + 1) % colors.length;
+    document.body.style.backgroundColor = colors[colorIndex];
+  });
+
+  updateCountdown();
+  const timer = setInterval(updateCountdown, 50);
+</script>
+
+</body>
+</html>
